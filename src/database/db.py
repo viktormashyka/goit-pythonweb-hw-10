@@ -12,14 +12,18 @@ from sqlalchemy.orm import sessionmaker
 from src.conf.config import config
 from src.database.models import Base
 
+
 async def create_database_if_not_exists():
-    conn = await asyncpg.connect(user='postgres', password='567234', host='localhost', port=5432)
+    conn = await asyncpg.connect(
+        user="postgres", password="567234", host="localhost", port=5432
+    )
     try:
         await conn.execute("CREATE DATABASE contacts_app")
     except asyncpg.exceptions.DuplicateDatabaseError:
         pass  # Database already exists
     finally:
         await conn.close()
+
 
 async def create_tables_if_not_exists(engine: AsyncEngine):
     async with engine.begin() as conn:
@@ -46,6 +50,7 @@ class DatabaseSessionManager:
         finally:
             await session.close()
 
+
 async def initialize_database():
     try:
         await create_database_if_not_exists()
@@ -63,6 +68,8 @@ async def get_db():
     async with sessionmanager.session() as session:
         yield session
 
+
 # Initialize the database and tables
 import asyncio
+
 asyncio.run(initialize_database())

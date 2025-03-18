@@ -1,5 +1,5 @@
 from datetime import date
-from typing import  Optional
+from typing import Optional
 from pydantic import BaseModel, Field, ConfigDict
 
 
@@ -17,6 +17,7 @@ class ContactResponse(ContactModel):
 
     model_config = ConfigDict(from_attributes=True)
 
+
 class ContactUpdate(BaseModel):
     first_name: Optional[str] = Field(None, max_length=50)
     last_name: Optional[str] = Field(None, max_length=50)
@@ -25,7 +26,31 @@ class ContactUpdate(BaseModel):
     date_of_birth: Optional[date] = Field(None)
     description: Optional[str] = Field(None, max_length=150)
 
+
 class ContactRemove(BaseModel):
     id: int
 
     model_config = ConfigDict(from_attributes=True)
+
+
+# Схема користувача
+class User(BaseModel):
+    id: int
+    username: str
+    email: str
+    avatar: str
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+# Схема для запиту реєстрації
+class UserCreate(BaseModel):
+    username: str
+    email: str
+    password: str
+
+
+# Схема для токену
+class Token(BaseModel):
+    access_token: str
+    token_type: str

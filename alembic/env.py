@@ -1,6 +1,6 @@
 from logging.config import fileConfig
 
-from sqlalchemy import engine_from_config
+from sqlalchemy import create_engine
 from sqlalchemy import pool
 
 from alembic import context
@@ -22,8 +22,11 @@ if config.config_file_name is not None:
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
 target_metadata = Base.metadata
-config.set_main_option("sqlalchemy.url", app_config.DB_URL)
-print(app_config.DB_URL)
+
+# Use a synchronous connection string for Alembic
+sync_db_url = app_config.DB_URL.replace('postgresql+asyncpg', 'postgresql')
+config.set_main_option("sqlalchemy.url", sync_db_url)
+print(sync_db_url)
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
@@ -62,9 +65,8 @@ def run_migrations_online() -> None:
     and associate a connection with the context.
 
     """
-    connectable = engine_from_config(
-        config.get_section(config.config_ini_section, {}),
-        prefix="sqlalchemy.",
+    connectable = create_engine(
+        config.get_main_option("sqlalchemy.url"),
         poolclass=pool.NullPool,
     )
 
