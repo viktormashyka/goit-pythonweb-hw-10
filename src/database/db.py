@@ -8,8 +8,7 @@ from sqlalchemy.ext.asyncio import (
     create_async_engine,
 )
 
-from sqlalchemy.orm import sessionmaker
-from src.conf.config import config
+from src.conf.config import settings
 from src.database.models import Base
 
 
@@ -57,11 +56,11 @@ async def initialize_database():
     except asyncpg.exceptions.DuplicateDatabaseError:
         pass  # Database already exists
 
-    engine = create_async_engine(config.DB_URL)
+    engine = create_async_engine(settings.DB_URL)
     await create_tables_if_not_exists(engine)
 
 
-sessionmanager = DatabaseSessionManager(config.DB_URL)
+sessionmanager = DatabaseSessionManager(settings.DB_URL)
 
 
 async def get_db():

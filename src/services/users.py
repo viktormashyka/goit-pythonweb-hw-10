@@ -9,7 +9,7 @@ class UserService:
     def __init__(self, db: AsyncSession):
         self.repository = UserRepository(db)
 
-    async def create_user(self, body: UserCreate):
+    async def create_user(self, body: UserCreate, avatar: str = None):
         avatar = None
         try:
             g = Gravatar(body.email)
@@ -27,3 +27,9 @@ class UserService:
 
     async def get_user_by_email(self, email: str):
         return await self.repository.get_user_by_email(email)
+
+    async def confirmed_email(self, email: str):
+        return await self.repository.confirmed_email(email)
+
+    async def update_avatar_url(self, email: str, url: str):
+        return await self.repository.update_avatar_url(email, url)

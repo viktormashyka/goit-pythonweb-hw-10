@@ -60,13 +60,15 @@ class ContactService:
                 detail="Помилка авторизації.",
             )
         return await self.contact_repository.search_contacts(
-            first_name, last_name, email
+            first_name, last_name, email, user
         )
 
     async def get_upcoming_birthdays(self, user: User):
-        if not user:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Помилка авторизації.",
-            )
-        return await self.contact_repository.get_upcoming_birthdays(user)
+            if not user:
+                raise HTTPException(
+                    status_code=status.HTTP_401_UNAUTHORIZED,
+                    detail="Помилка авторизації.",
+                )
+            return await self.contact_repository.get_upcoming_birthdays(user)
+
+    

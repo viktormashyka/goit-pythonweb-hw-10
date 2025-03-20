@@ -1,6 +1,6 @@
 from datetime import date
 from typing import Optional
-from pydantic import BaseModel, Field, ConfigDict
+from pydantic import BaseModel, Field, ConfigDict, EmailStr
 
 
 class ContactModel(BaseModel):
@@ -8,7 +8,7 @@ class ContactModel(BaseModel):
     last_name: str = Field(max_length=50)
     email: str = Field(max_length=50)
     phone: str = Field(max_length=13)
-    date_of_birth: date
+    birthday: date
     description: Optional[str] = Field(None, max_length=150)
 
 
@@ -23,7 +23,7 @@ class ContactUpdate(BaseModel):
     last_name: Optional[str] = Field(None, max_length=50)
     email: Optional[str] = Field(None, max_length=50)
     phone: Optional[str] = Field(None, max_length=13)
-    date_of_birth: Optional[date] = Field(None)
+    birthday: Optional[date] = Field(None)
     description: Optional[str] = Field(None, max_length=150)
 
 
@@ -54,3 +54,7 @@ class UserCreate(BaseModel):
 class Token(BaseModel):
     access_token: str
     token_type: str
+
+
+class RequestEmail(BaseModel):
+    email: EmailStr

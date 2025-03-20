@@ -1,7 +1,7 @@
 from datetime import date, timedelta
 from typing import List, Optional
 
-from sqlalchemy import select, and_
+from sqlalchemy import select, and_, or_, extract
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.database.models import Contact, User
@@ -71,8 +71,16 @@ class ContactRepository:
         stmt = select(Contact).filter(
             and_(
                 Contact.user_id == user.id,
-                Contact.date_of_birth >= today,
-                Contact.date_of_birth <= next_week,
+                or_(
+                    and_(
+                        extract('month', Contact.birthday) == today.month,
+                        extract('day', Contact.birthday) >= today.day
+                    ),
+                    and_(
+                        extract('month', Contact.birthday) == next_week.month,
+                        extract('day', Contact.birthday) <= next_week.day
+                    )
+                )
             )
         )
         result = await self.db.execute(stmt)
