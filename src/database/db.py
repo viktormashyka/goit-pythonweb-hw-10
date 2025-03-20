@@ -1,5 +1,6 @@
 import contextlib
 import asyncpg
+import asyncio
 
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import (
@@ -68,7 +69,5 @@ async def get_db():
         yield session
 
 
-# Initialize the database and tables
-import asyncio
-
-asyncio.run(initialize_database())
+if __name__ == "__main__":
+    asyncio.run(initialize_database())

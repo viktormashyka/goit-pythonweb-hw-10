@@ -24,6 +24,7 @@ async def get_contacts(
     contacts = await contact_service.get_contacts(skip, limit, user)
     return contacts
 
+
 @router.get("/search", response_model=List[ContactResponse])
 async def search_contacts(
     first_name: Optional[str] = None,
@@ -36,6 +37,7 @@ async def search_contacts(
     contacts = await contact_service.search_contacts(first_name, last_name, email, user)
     return contacts
 
+
 @router.get("/birthdays", response_model=List[ContactResponse])
 async def get_upcoming_birthdays(
     db: AsyncSession = Depends(get_db), user: User = Depends(get_current_user)
@@ -43,6 +45,7 @@ async def get_upcoming_birthdays(
     contact_service = ContactService(db)
     contacts = await contact_service.get_upcoming_birthdays(user)
     return contacts
+
 
 @router.get("/{contact_id}", response_model=ContactResponse)
 async def read_contact(

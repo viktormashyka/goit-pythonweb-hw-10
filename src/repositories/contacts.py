@@ -73,14 +73,14 @@ class ContactRepository:
                 Contact.user_id == user.id,
                 or_(
                     and_(
-                        extract('month', Contact.birthday) == today.month,
-                        extract('day', Contact.birthday) >= today.day
+                        extract("month", Contact.birthday) == today.month,
+                        extract("day", Contact.birthday) >= today.day,
                     ),
                     and_(
-                        extract('month', Contact.birthday) == next_week.month,
-                        extract('day', Contact.birthday) <= next_week.day
-                    )
-                )
+                        extract("month", Contact.birthday) == next_week.month,
+                        extract("day", Contact.birthday) <= next_week.day,
+                    ),
+                ),
             )
         )
         result = await self.db.execute(stmt)

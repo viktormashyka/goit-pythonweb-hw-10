@@ -7,14 +7,21 @@ WORKDIR /app
 # Copy the current directory contents into the container at /app
 COPY . .
 
-# Install any needed packages specified in requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
+# Set the PYTHONPATH environment variable
+ENV PYTHONPATH=/app
 
-# Install iproute2 for ss command
-RUN apt-get update && apt-get install -y iproute2
+# Install system dependencies and Python packages
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends iproute2 libpq-dev gcc build-essential && \
+    rm -rf /var/lib/apt/lists/* && \
+    pip install --no-cache-dir -r requirements.txt
 
 # Expose the port that the app runs on
 EXPOSE 8000
 
+# Create a non-root user and switch to it
+RUN useradd -m appuser
+USER appuser
+
 # Command to run the application
-CMD ["uvicorn", "src.main:app", "--host", "127.0.0.1", "--port", "8000", "--reload"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
